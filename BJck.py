@@ -4,7 +4,7 @@ cards = fn.create_decks()
 players = fn.player_hand()
 player_bank = fn.players_bank(len(players) - 1)
 
-
+#--------------------------------------------spaghetti code learning how to fix it
 def play_round():
 
     shoe_penetration = False
