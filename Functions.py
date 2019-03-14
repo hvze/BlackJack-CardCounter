@@ -22,7 +22,7 @@ def find_value(card):
     return int(card)
 
 
-# find TRUE count of specific card
+# find running count of specific card
 def find_true_count(card):
     card = find_value(card)
     if card == 'A' or card == 10:
@@ -35,6 +35,7 @@ def find_true_count(card):
 
 # creates decks
 def create_decks():
+
     global cards
     global card_value
     global card_suit
@@ -44,7 +45,7 @@ def create_decks():
     number_of_decks = 6
     cards = []
     card_value = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A']
-    card_suit = ['S', 'C', 'H', 'D']
+    card_suit = ['Spade', 'Club', 'Heart', 'Diamond']
 
     for decks in range(number_of_decks):
         for card_s in card_suit:
@@ -52,7 +53,7 @@ def create_decks():
                 cards.append([decks, card_s, card_v])
 
     np.random.shuffle(cards)
-    card_penetrated = int(len(cards) * np.random.randint(70, 75) / 100)
+    card_penetrated = int(len(cards) * np.random.randint(70, 80) / 100)
     cards.insert(card_penetrated, 'penetration')
 
     return cards
@@ -60,9 +61,9 @@ def create_decks():
 
 # deals the cards
 def deal(true_count):
+
     global shoe_penetration
 
-    shoe_penetration = False
     bet_r = 0
     cards_dealt = cards
     bet_big = False
@@ -72,6 +73,7 @@ def deal(true_count):
 
         top_card = cards_dealt.pop(0)
 
+        # if penetration card is drawn, show_penetration is set to true and another card is drawn in its place
         if top_card == 'penetration':
             shoe_penetration = True
             top_card = cards_dealt.pop(0)

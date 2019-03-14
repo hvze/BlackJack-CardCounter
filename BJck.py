@@ -1,10 +1,10 @@
 import Functions as fn
 
-cards = fn.create_decks()
+fn.create_decks()
 players = fn.player_hand()
 player_bank = fn.players_bank(len(players) - 1)
 
-#--------------------------------------------spaghetti code learning how to fix it
+
 def play_round():
 
     shoe_penetration = False
@@ -43,12 +43,18 @@ def play_round():
                         players[turn].append([1, 11])
                     else:
                         players[turn].append(hand)
-            # print(players)
+
             # finds out value of hand
             for player, card in players.items():
+
+                # checks if player has an ace in hand
                 if [1, 11] in card:
-                    if card[0] == [1, 11] and card[1] == [1, 11]:
+
+                    # both cards are aces
+                    if card.count([1, 11]) == 2:
                         players[player] = [2, 12]
+
+                    # only one card is an ace
                     elif card[0] != [1, 11]:
                         card1 = card[0] + 1
                         card2 = card[0] + 11
@@ -57,12 +63,11 @@ def play_round():
                         card1 = card[1] + 1
                         card2 = card[1] + 11
                         players[player] = [card1, card2]
+
+                # no ace in hand
                 else:
                     players[player] = sum(card)
 
-            # print(board)
-            # print(players)
-            print()
             dealer_in_play = True
             player_num = 1
             bet_done = True
@@ -334,14 +339,14 @@ def play_round():
             # shoe_penetration = True
 
         if shoe_penetration:
-            cards = fn.create_decks()
+            fn.create_decks()
             tc = 0
             bb = 0
             print('tc has been reset------------------------------------------round is over\n')
             num_rounds += 1
             print(num_rounds)
             shoe_penetration = False
-            if num_rounds > 99:
+            if num_rounds > 9999:
                 return num_rounds, num_hands, player_bank
 
 
@@ -353,4 +358,4 @@ print('Player played', result[0], 'rounds and played', result[1], 'hands with', 
 # print(result[2].get('Player 1'))
 
 exit()
-# TODO (make bets)(auto-play with basic strategy) (statistics)--------
+# TODO (make double bets, split option)--------
