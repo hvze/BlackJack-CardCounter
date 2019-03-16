@@ -24,7 +24,6 @@ def play_round():
         if not dealt and round_in_play:
 
             # clears the player's hands
-
             for player, card in players.items():
                 players[player] = []
 
@@ -131,7 +130,7 @@ def play_round():
                             # checks if an Ace is drawn
                             if hand == 'A':
 
-                                print('Player', str(player_num), 'drew an', hand, '\n')
+                                print('Player', str(player_num), 'drew an ace', '\n')
 
                                 # if an Ace is already in hand
                                 if type(player_hand) == list:
@@ -147,6 +146,7 @@ def play_round():
                                 # no Ace in hand
                                 else:
 
+                                    # hand value over 10 so only 1 is added not 11, if under 10; 1 and 11 are added
                                     if int(player_hand) > 10:
                                         player_hand += 1
                                         if int(player_hand) > 21:
@@ -156,18 +156,22 @@ def play_round():
                                         else:
                                             print(current_player, 'has', player_hand, '\n')
                                             players[player_in_play] = player_hand
-
                                     elif int(player_hand) <= 10:
                                         players[player_in_play] = [int(player_hand) + 1, int(player_hand) + 11]
 
                             # if no Ace is drawn
                             else:
+
                                 print('Player', str(player_num), 'drew a', hand, '\n')
 
                                 # if an Ace is already in hand
                                 if type(player_hand) == list:
-                                    card1_in_play = player_hand[0] + hand
-                                    card2_in_play = player_hand[1] + hand
+
+                                    card1_in_play, card2_in_play = player_hand[0] + hand, player_hand[1] + hand
+
+                                    # if second value of hand with ace is over 21 then the first value becomes the
+                                    # value of the hand. if values of the hand are below 21 then they are added
+                                    # normally.
                                     if card2_in_play > 21:
                                         players[player_in_play] = card1_in_play
                                         print(current_player, 'has', card1_in_play, '\n')
@@ -177,12 +181,15 @@ def play_round():
 
                                 # if no Ace in hand
                                 else:
+
                                     player_hand += hand
+
+                                    # card is drawn; if value is over 21 then the player busts, if under 21 the round
+                                    # continues.
                                     if int(player_hand) > 21:
                                         print(current_player, 'Bust with', player_hand, '\n')
                                         players[player_in_play] = 'Bust'
                                         player_num += 1
-
                                     elif int(player_hand) <= 21:
                                         players[player_in_play] = player_hand
 
@@ -231,8 +238,12 @@ def play_round():
 
                                     # if dealer has an ace in hand
                                     if type(dealer_hand) == list:
-                                        dealer_hand1 = dealer_hand[0]
-                                        dealer_hand2 = dealer_hand[1]
+
+                                        dealer_hand1, dealer_hand2 = dealer_hand[0], dealer_hand[1]
+
+                                        # if second value of hand with ace is over 21 then the first value becomes the
+                                        # value of the hand. if the either the first or second value of the hand are
+                                        # below 21 and over 17 then the dealer stays with the highest value.
                                         if dealer_hand2 > 21:
                                             players['Dealer'] = dealer_hand1
                                         elif 17 <= dealer_hand1 <= 21:
@@ -243,7 +254,10 @@ def play_round():
                                             players['Dealer'] = dealer_hand2
                                             print('Dealer stays with', dealer_hand2)
                                             dealer_on = False
+
+                                        # if hand value is under 17 then the dealer draws
                                         else:
+
                                             dealer_draw = fn.deal(tc)
                                             tc, bb, br = dealer_draw[2], dealer_draw[3], dealer_draw[4]
                                             num_hands += 1
@@ -255,8 +269,9 @@ def play_round():
                                             # draws a card a finds the value
                                             dealer_draw = fn.find_value(dealer_draw[0][2])
 
-                                            # dealer draws an ace
+                                            # dealer draws an ace with ace already in hand
                                             if dealer_draw == 'A':
+
                                                 if dealer_hand1 <= 10:
                                                     dealer_hand1 = dealer_hand[0] + 11
                                                     players['Dealer'] = dealer_hand1
@@ -266,6 +281,8 @@ def play_round():
 
                                                 dealer_hand2 = dealer_hand[1] + 1
                                                 players['Dealer'] = dealer_hand2
+
+                                            # no ace is drawn
                                             else:
                                                 dealer_hand1 = dealer_hand[0] + dealer_draw
                                                 dealer_hand2 = dealer_hand[1] + dealer_draw
